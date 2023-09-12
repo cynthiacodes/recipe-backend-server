@@ -4,6 +4,7 @@ import express from "express";
 import { Client } from "pg";
 import { getEnvVarOrFail } from "./support/envVarUtils";
 import { setupDBClientConfig } from "./support/setupDBClientConfig";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const client = new Client(dbClientConfig);
 
 const app = express();
 
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors());
 
@@ -19,6 +21,16 @@ app.get("/", async (_req, res) => {
     res.json({
         msg: "Hello! There's nothing interesting for GET / from this recipe backend server",
     });
+});
+
+app.get("/recipes", async (_req, res) => {
+    try {
+        const response = await client.query("select * from recipes");
+        res.status(200).json(response.rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred. Check server logs.");
+    }
 });
 
 app.get("/health-check", async (_req, res) => {
