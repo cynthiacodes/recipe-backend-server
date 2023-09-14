@@ -5,10 +5,10 @@ CREATE TYPE MEAL_TIME AS ENUM ('Breakfast', 'Lunch', 'Dinner', 'Snack');
 
 CREATE TABLE RECIPES(
     id serial primary key,
-    title varchar(255),
+    title varchar(255) not null,
     meal_type MEAL_TIME,
-    cuisine varchar(100),
-    video_url varchar(255) 
+    cuisine varchar(100) not null,
+    video_url varchar(255) not null
     );
 
 INSERT INTO RECIPES (title, meal_type, cuisine, video_url)
@@ -19,7 +19,7 @@ VALUES
 
     ('Matoke', 'Dinner', 'Kenyan', 'https://www.youtube.com/watch?v=RWJ4uRVLlE0&ab_channel=CookingTastyAfricanDishes'),
     
-    ('samosa', 'Breakfast', 'Kenyan', 'https://www.youtube.com/watch?v=S-j-LxKB-Eg&ab_channel=AtasteofhomewithViv');
+    ('Samosa', 'Breakfast', 'Kenyan', 'https://www.youtube.com/watch?v=S-j-LxKB-Eg&ab_channel=AtasteofhomewithViv');
 
 
 
