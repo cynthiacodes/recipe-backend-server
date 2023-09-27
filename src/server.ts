@@ -55,6 +55,22 @@ app.post<{}, {}, Recipe>("/recipes", async (req, res) => {
     }
 });
 
+app.put<{ id: number }, {}, Recipe>("/recipes/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { title, meal_type, cuisine, video_url } = req.body;
+        const updateQuery =
+            "UPDATE RECIPES SET title = $1, meal_type = $2, cuisine = $3, video_url = $4 WHERE id = $5 RETURNING *";
+        const values = [title, meal_type, cuisine, video_url, id];
+        const response = await client.query(updateQuery, values);
+        res.status(200).json({
+            updatedRecipe: response.rows[0],
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("An error occurred. Check server logs.");
+    }
+});
 app.delete<{ id: number }>("/recipes/:id", async (req, res) => {
     try {
         const id = req.params.id;
